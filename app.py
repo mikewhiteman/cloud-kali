@@ -15,7 +15,7 @@ login_manager.init_app(app)
 
 @app.route('/portal')
 def portal():
-    return 'test2'
+    return 'test3'
 
 if __name__ == '__main__':
     (app.run(host='0.0.0.0', debug=True))
