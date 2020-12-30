@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(60),)
     last_name = db.Column(db.String(60))
     password_hash = db.Column(db.String(128))
-    role_id = db.Column(db.String(60), default='Unverified')
+    role = db.Column(db.String(60), default='Unverified')
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
