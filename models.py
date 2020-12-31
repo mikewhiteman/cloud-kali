@@ -1,7 +1,9 @@
+import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -25,9 +27,21 @@ class User(UserMixin, db.Model):
     def load_user(id):
         return User.query.get(int(id))
 
-
-class Instance(db.Model):
-    __tablename__ = 'instances'
+class Image(db.Model):
+    __tablename__ = 'images'
     ami_id = db.Column(db.String(60), primary_key=True, unique=True)
     name = db.Column(db.String(60))
     description = db.Column(db.String(512))
+
+class Instance(db.Model):
+    __tablename__ = 'instances'
+    instance_id = db.Column(db.String(60), primary_key=True, unique=True)
+    user_id = Column(db.String(60), ForeignKey('User.id'))
+    created_date = Column(DateTime, default=datetime.datetime.utcnow)
+    username = Column(db.String(30))
+    password = Column(db.String(30))
+    state = Column(db.String(30), default='live')
+
+
+
+
