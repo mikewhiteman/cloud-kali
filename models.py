@@ -36,11 +36,11 @@ class Image(db.Model):
 class Instance(db.Model):
     __tablename__ = 'instances'
     instance_id = db.Column(db.String(60), primary_key=True, unique=True)
-    user_id = Column(db.String(60), ForeignKey('User.id'))
-    created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    username = Column(db.String(30))
-    password = Column(db.String(30))
-    state = Column(db.String(30), default='live')
+    user_id = db.ForeignKey('User.id')
+    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    username = db.Column(db.String(30))
+    password =db.Column(db.String(30))
+    state = db.Column(db.String(30), default='live')
 
 
 
