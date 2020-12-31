@@ -8,9 +8,9 @@ login_manager = LoginManager()
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     email = db.Column(db.String(40), unique=True)
-    first_name = db.Column(db.String(60),)
+    first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
     password_hash = db.Column(db.String(128))
     role = db.Column(db.String(60), default='Unverified')
@@ -25,3 +25,9 @@ class User(UserMixin, db.Model):
     def load_user(id):
         return User.query.get(int(id))
 
+
+class Instance(db.Model):
+    __tablename__ = 'instances'
+    ami_id = db.Column(db.String(60), primary_key=True, unique=True)
+    name = db.Column(db.String(60))
+    description = db.Column(db.String(512))
