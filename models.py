@@ -78,10 +78,6 @@ class Kali(db.Model):
 
         print(ec2_instance)
 
-x = Kali('test12345')
-print(x.user_id)
-print(x.username)
-print(x.password)
 
 
 
