@@ -1,9 +1,11 @@
 import datetime
+import boto3
+import secrets
+import string
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -33,7 +35,7 @@ class Image(db.Model):
     name = db.Column(db.String(60))
     description = db.Column(db.String(512))
 
-class Instance(db.Model):
+class Kali(db.Model):
     __tablename__ = 'instances'
     instance_id = db.Column(db.String(60), primary_key=True, unique=True)
     user_id = db.ForeignKey('User.id')
@@ -41,6 +43,49 @@ class Instance(db.Model):
     username = db.Column(db.String(30))
     password =db.Column(db.String(30))
     state = db.Column(db.String(30), default='live')
+    
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self._generate_creds()
+        self._create_instance()
+
+    def _generate_creds(self):
+        alphabet = string.ascii_letters + string.digits
+        self.username = 'cloudkali'
+        self.password = ''.join(secrets.choice(alphabet) for i in range(12))
+
+    def _create_instance(self):
+        ec2 = boto3.resource('ec2')
+        userdata = f"""#!/bin/bash
+        ###
+        # This script will provision an an account with a random password
+        ###
+        useradd -m -s /bin/bash {self.username}
+        echo {self.username}:{self.password} |  chpasswd
+        usermod -aG sudo {self.username}
+        """
+        
+        ec2_instance = ec2.create_instances(
+        ImageId='ami-0f24d5a5c0b5c0a18',
+        MinCount=1,
+        MaxCount=1,
+        InstanceType='t2.small',
+        KeyName='cis4093_kali_hosts',
+        SecurityGroupIds=['sg-0eb2588803e7caef8'],
+        UserData = userdata,
+        SubnetId='subnet-021de55c66cc45ff3'
+        ) 
+
+        print(ec2_instance)
+
+x = Kali('test12345')
+print(x.user_id)
+print(x.username)
+print(x.password)
+
+
+
+
 
 
 
