@@ -81,9 +81,3 @@ class Kali(db.Model):
         UserData = userdata,
         SubnetId='subnet-021de55c66cc45ff3'
         ) 
-
-
-
-
-jim = User(email="test@test.com", first_name="Jim", last_name="Halpert", password="test")
-print(jim.password_hash)
