@@ -19,9 +19,10 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = UserRe
+    registration_form = UserRegistrationForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data, first_name=form.first_name.data, last_name=form.last_name.data, password=form.password.data)
 
-@app.route
 
 if __name__ == '__main__':
     (app.run(host='0.0.0.0', debug=True))

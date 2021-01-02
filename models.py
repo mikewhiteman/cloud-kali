@@ -13,16 +13,21 @@ login_manager = LoginManager()
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, unique=True, default=str(uuid.uuid4()))
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     email = db.Column(db.String(40), unique=True)
     first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
     password_hash = db.Column(db.String(128))
-    role = db.Column(db.String(60), default='Unverified')
+    role = db.Column(db.String(60), default='unverified')
 
-    def hash_password(self, password):
+    def __init__(self, email, first_name, last_name, password):
+        self.id = str(uuid.uuid4())
+        self.email = email
+        self.first_name = first_name
+        self.last_name = last_name
         self.password_hash = generate_password_hash(password)
-    
+        self.role = 'unverified'
+
     def verify_hash(self, password):
         check_password_hash(self.password_hash, password)
 
@@ -80,7 +85,5 @@ class Kali(db.Model):
 
 
 
-
-
-
-
+jim = User(email="test@test.com", first_name="Jim", last_name="Halpert", password="test")
+print(jim.password_hash)
