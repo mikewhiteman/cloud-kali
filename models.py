@@ -76,7 +76,6 @@ class Kali(db.Model):
         SubnetId='subnet-021de55c66cc45ff3'
         ) 
 
-        print(ec2_instance)
 
 
 
