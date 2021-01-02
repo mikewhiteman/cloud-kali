@@ -2,8 +2,7 @@ import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from models import db, User, Instance, Image, login_manager
-from kali_management import create_instance
+from models import db, User, Kali, Image, login_manager
 
 app = Flask(__name__)
 app.config.from_object('config')

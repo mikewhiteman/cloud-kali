@@ -83,5 +83,3 @@ class Kali(db.Model):
 
 
 
-
-
