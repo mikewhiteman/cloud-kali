@@ -2,6 +2,7 @@ import datetime
 import boto3
 import secrets
 import string
+import uuid
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +13,7 @@ login_manager = LoginManager()
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True, default=str(uuid.uuid4()))
     email = db.Column(db.String(40), unique=True)
     first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
