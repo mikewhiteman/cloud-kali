@@ -17,14 +17,14 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Home
+              <a class="nav-link" href="{{ url_for('home') }}">Home
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Sign Up</a>
+              <a class="nav-link" href="{{ url_for('register') }}">Register</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Login</a>
@@ -36,10 +36,9 @@
       </br>
     {% block body %}
     {% endblock %}
-
     <footer class="footer bg-primary text-primary" >
-        <div class="container">
-          <span class="text-muted">Footer text</span>
+        <div class="container text-center">
+          <span class="text-muted">Created for Baruch CIS 4093 (Ethical Hacking)</span>
         </div>
       </footer>
 
