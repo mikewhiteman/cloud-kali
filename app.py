@@ -51,15 +51,19 @@ def login():
 def dashboard():
     return "dashboard"
 
-@app.route('/instance', methods=['GET'])
+@app.route('/instance', methods=['POST'])
 @login_required
 def create_instance():
     user_id = current_user.id
     kali = Kali(user_id)
-    print(kali.instance_id)
-    print(kali.username)
-    print(kali.password)
-    return "Creating instances"
+    db.session.add(kali)
+    db.session.commit()
+    return f"""[Debug] Created instance with the following info:
+
+    instance_id = {kali.instance_id}
+    username = {kali.username}
+    password = {kali.password}
+    ip_address = {kali.ip_address} """
 
 if __name__ == '__main__':
     (app.run(host='0.0.0.0', debug=True))

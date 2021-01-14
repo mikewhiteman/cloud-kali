@@ -3,6 +3,7 @@ import boto3
 import secrets
 import string
 import uuid
+import time
 from flask_login import UserMixin, LoginManager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -50,13 +51,14 @@ class Kali(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     username = db.Column(db.String(30))
     password =db.Column(db.String(30))
+    ip_address = db.Column(db.String(30))
     state = db.Column(db.String(30), default='live')
     
     def __init__(self, user_id):
         self.user_id = user_id
         self._generate_creds()
         self._create_instance()
-
+        self._get_instance_data()
 
     def _generate_creds(self):
         alphabet = string.ascii_letters + string.digits
@@ -86,3 +88,9 @@ class Kali(db.Model):
         )
 
         self.instance_id = ec2_instance[0].instance_id
+
+    def _get_instance_data(self):
+        time.sleep(3) #Quick hack since ec2 IP address takes a few seconds to gen. This will be async in the future.
+        client = boto3.client('ec2')
+        instance_data = client.describe_instances(InstanceIds=[self.instance_id])
+        self.ip_address = instance_data['Reservations'][0]['Instances'][0]['NetworkInterfaces'][0]['Association']['PublicIp']
