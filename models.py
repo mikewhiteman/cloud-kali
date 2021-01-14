@@ -29,7 +29,7 @@ class User(UserMixin, db.Model):
         self.role = 'unverified'
 
     def verify_hash(self, password):
-        check_password_hash(self.password_hash, password)
+        return check_password_hash(self.password_hash, password)
 
     @login_manager.user_loader
     def load_user(id):
