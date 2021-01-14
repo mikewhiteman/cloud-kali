@@ -80,4 +80,4 @@ class Kali(db.Model):
         SecurityGroupIds=['sg-0eb2588803e7caef8'],
         UserData = userdata,
         SubnetId='subnet-021de55c66cc45ff3'
-        ) 
+        )
