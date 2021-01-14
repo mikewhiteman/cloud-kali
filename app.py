@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_login import login_required, login_user, logout_user
 from flask_migrate import Migrate
@@ -15,6 +16,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 login_manager.init_app(app)
+login_manager.login_view = "login"
 
 @app.route('/') 
 def home():
@@ -37,15 +39,20 @@ def login():
     login_form = UserLoginForm()
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
-        print(user)
-        print(user.verify_hash(login_form.password.data))
         if user is not None and user.verify_hash(login_form.password.data):
-            print("User logged in successfully")
+            login_user(user)
+            print(f"[{datetime.datetime.utcnow()}] User {user.email} logged in")
         else:
-            flash("Incorrect email or password")
+            flash("Incorrect account credentials")
     return render_template('login.html', form=login_form)
 
 
+
+@app.route('/test', methods=['GET', 'POST'])
+@login_required
+def test():
+    #Test protected page
+    return "Protected page"
 
 
 if __name__ == '__main__':
