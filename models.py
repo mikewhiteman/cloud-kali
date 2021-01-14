@@ -3,10 +3,9 @@ import boto3
 import secrets
 import string
 import uuid
-from flask_login import UserMixin
+from flask_login import UserMixin, LoginManager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -31,9 +30,12 @@ class User(UserMixin, db.Model):
     def verify_hash(self, password):
         return check_password_hash(self.password_hash, password)
 
-    @login_manager.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        return User.query.get(user_id)
+    except:
+        return None
 
 class Image(db.Model):
     __tablename__ = 'images'
@@ -54,6 +56,7 @@ class Kali(db.Model):
         self.user_id = user_id
         self._generate_creds()
         self._create_instance()
+
 
     def _generate_creds(self):
         alphabet = string.ascii_letters + string.digits
@@ -81,3 +84,5 @@ class Kali(db.Model):
         UserData = userdata,
         SubnetId='subnet-021de55c66cc45ff3'
         )
+
+        self.instance_id = ec2_instance[0].instance_id

@@ -1,7 +1,7 @@
 import os
 import datetime
 from flask import Flask, render_template, redirect, url_for, flash
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -46,14 +46,20 @@ def login():
             flash("Incorrect account credentials")
     return render_template('login.html', form=login_form)
 
-
-
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
-def test():
-    #Test protected page
-    return "Protected page"
+def dashboard():
+    return "dashboard"
 
+@app.route('/instance', methods=['GET'])
+@login_required
+def create_instance():
+    user_id = current_user.id
+    kali = Kali(user_id)
+    print(kali.instance_id)
+    print(kali.username)
+    print(kali.password)
+    return "Creating instances"
 
 if __name__ == '__main__':
     (app.run(host='0.0.0.0', debug=True))
